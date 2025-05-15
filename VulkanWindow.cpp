@@ -236,8 +236,8 @@ void VulkanWindow::handleInput()
     if (mSelectedObject){
         //Reusing mCameraSpeed instead of making new variable
         if (mInput.D)
-            mSelectedObject->move(mCameraSpeed);
-        if (mInput.A)
             mSelectedObject->move(-mCameraSpeed);
+        if (mInput.A)
+            mSelectedObject->move(mCameraSpeed);
     }
 }

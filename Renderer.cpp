@@ -10,6 +10,7 @@
 #include "playercharacter.h"
 #include "stb_image.h"
 #include "ObjMesh.h"
+#include "trophies.h"
 
 /*** Renderer class ***/
 Renderer::Renderer(QVulkanWindow *w, bool msaa)
@@ -46,6 +47,16 @@ Renderer::Renderer(QVulkanWindow *w, bool msaa)
 
     //Playing Field
     mObjects.push_back(new TriangleSurface());
+
+    //Trophies
+    mObjects.push_back(new Trophies(assetPath + "cylinder.obj", 0));
+    mObjects.back()->move(-1.5f);
+    mObjects.push_back(new Trophies(assetPath + "cylinder.obj", 1));
+    mObjects.back()->move(0.0f);
+    mObjects.push_back(new Trophies(assetPath + "cylinder.obj", 2));
+    mObjects.back()->move(1.5f);
+    mObjects.push_back(new Trophies(assetPath + "cylinder.obj", 3));
+    mObjects.back()->move(3.0f);
 
     //Naming
     mObjects.at(0)->setName("player");
@@ -270,7 +281,7 @@ void Renderer::initResources()
 
 	//Making a pipeline for drawing lines
 	mColorMaterial.pipeline = mPipeline1;                       // reusing most of the settings from the first pipeline
-    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;   // draw lines
+    //inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;   // draw lines
     rasterization.polygonMode = VK_POLYGON_MODE_FILL;           // VK_POLYGON_MODE_LINE will make a wireframe; VK_POLYGON_MODE_FILL
     rasterization.lineWidth = 5.0f;
     pipelineInfo.pInputAssemblyState = &inputAssembly;

@@ -23,6 +23,7 @@ qt_add_executable(QtVulkanApp
     HeightMap.h HeightMap.cpp
     ObjMesh.h ObjMesh.cpp
     playercharacter.h playercharacter.cpp
+    trophies.h trophies.cpp
 
 
 

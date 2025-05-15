@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "VisualObject.h"
 #include "Utilities.h"
+#include "bullet.h"
 
 class Renderer : public QVulkanWindowRenderer
 {
@@ -37,6 +38,9 @@ public:
 
     std::vector<VisualObject*>& getObjects() { return mObjects; }
     std::unordered_map<std::string, VisualObject*>& getMap() { return mMap; }
+
+    //Bullet function
+    void shootBullet();
 
 protected:
 
@@ -122,6 +126,12 @@ private:
 		//VkPipelineLayout pipelineLayout{ VK_NULL_HANDLE };    //also should have had a spesific pipeline layout
         VkPipeline pipeline{ VK_NULL_HANDLE };
     } mColorMaterial;
+
+    //Bullet
+    Bullet* mBullet;
+    void bulletDeath();
+    void updateBullet();
+
 };
 
 #endif // RENDERER_H

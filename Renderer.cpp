@@ -7,6 +7,7 @@
 #include "Triangle.h"
 #include "TriangleSurface.h"
 #include "HeightMap.h"
+#include "bullet.h"
 #include "playercharacter.h"
 #include "stb_image.h"
 #include "ObjMesh.h"
@@ -57,6 +58,10 @@ Renderer::Renderer(QVulkanWindow *w, bool msaa)
     mObjects.back()->move(1.5f);
     mObjects.push_back(new Trophies(assetPath + "cylinder.obj", 3));
     mObjects.back()->move(3.0f);
+
+    //Bullet
+    mBullet = new Bullet;
+    mObjects.push_back(mBullet);
 
     //Naming
     mObjects.at(0)->setName("player");
@@ -335,6 +340,7 @@ void Renderer::startNextFrame()
     //Has to be done each frame to get smooth movement
     mVulkanWindow->handleInput();
     mCamera.update();               //input can have moved the camera
+    updateBullet();
 
     VkCommandBuffer commandBuffer = mWindow->currentCommandBuffer();
 
@@ -350,37 +356,41 @@ void Renderer::startNextFrame()
     /********************************* Our draw call!: *********************************/
     for (std::vector<VisualObject*>::iterator it=mObjects.begin(); it!=mObjects.end(); it++)
     {
-        //Draw type
-		if ((*it)->getDrawType() == 0)
-			mDeviceFunctions->vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, mPipeline1);
-		else
-			mDeviceFunctions->vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, mColorMaterial.pipeline);
-
-        QMatrix4x4 mvp = mCamera.projectionMatrix() * mCamera.viewMatrix() * (*it)->getMatrix();
-        setModelMatrix((*it)->getMatrix()); //mvp);
-
-
-        
-        if ((*it)->getColorType() == 1)
+        if((*it)->shouldRender)
         {
-            setTexture(mTextureHandle1, commandBuffer);
-        }
-        else {
-            setTexture(mTextureHandle, commandBuffer);
-        }
-        // Bind the texture descriptor set
 
-        //SET DIFFERENT TEXTURE
-        
-        mDeviceFunctions->vkCmdBindVertexBuffers(commandBuffer, 0, 1, &(*it)->getVBuffer(), &vbOffset);
-		//Check if we have an index buffer - if so, use Indexed draw
-        if ((*it)->getIndices().size() > 0)
-        {
-			mDeviceFunctions->vkCmdBindIndexBuffer(commandBuffer, (*it)->getIBuffer(), 0, VK_INDEX_TYPE_UINT32);
-			mDeviceFunctions->vkCmdDrawIndexed(commandBuffer, (*it)->getIndices().size(), 1, 0, 0, 0); //size == number of indices
-		}
-		else   //No index buffer - use regular draw
-			mDeviceFunctions->vkCmdDraw(commandBuffer, (*it)->getVertices().size(), 1, 0, 0);   
+            //Draw type
+            if ((*it)->getDrawType() == 0)
+                mDeviceFunctions->vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, mPipeline1);
+            else
+                mDeviceFunctions->vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, mColorMaterial.pipeline);
+
+            QMatrix4x4 mvp = mCamera.projectionMatrix() * mCamera.viewMatrix() * (*it)->getMatrix();
+            setModelMatrix((*it)->getMatrix()); //mvp);
+
+
+
+            if ((*it)->getColorType() == 1)
+            {
+                setTexture(mTextureHandle1, commandBuffer);
+            }
+            else {
+                setTexture(mTextureHandle, commandBuffer);
+            }
+            // Bind the texture descriptor set
+
+            //SET DIFFERENT TEXTURE
+
+            mDeviceFunctions->vkCmdBindVertexBuffers(commandBuffer, 0, 1, &(*it)->getVBuffer(), &vbOffset);
+            //Check if we have an index buffer - if so, use Indexed draw
+            if ((*it)->getIndices().size() > 0)
+            {
+                mDeviceFunctions->vkCmdBindIndexBuffer(commandBuffer, (*it)->getIBuffer(), 0, VK_INDEX_TYPE_UINT32);
+                mDeviceFunctions->vkCmdDrawIndexed(commandBuffer, (*it)->getIndices().size(), 1, 0, 0, 0); //size == number of indices
+            }
+            else   //No index buffer - use regular draw
+                mDeviceFunctions->vkCmdDraw(commandBuffer, (*it)->getVertices().size(), 1, 0, 0);
+        }
     }
     /***************************************/
 
@@ -1224,4 +1234,28 @@ void Renderer::destroyTexture(TextureHandle& textureHandle)
 	mDeviceFunctions->vkDestroyImageView(mWindow->device(), textureHandle.mImageView, nullptr);
     mDeviceFunctions->vkDestroyImage(mWindow->device(), textureHandle.mImage, nullptr);
 	mDeviceFunctions->vkFreeMemory(mWindow->device(), textureHandle.mTextureMemory, nullptr);
+}
+
+void Renderer::shootBullet(){
+    if (!mBullet->shouldRender)
+    {
+        mBullet->setPosition(mObjects.front()->getPosition().x(),
+                            //Keep the same height
+                            mBullet->getPosition().y(),
+                            mObjects.front()->getPosition().z() + -0.5f);
+        mBullet->shouldRender = true;
+    }
+    return;
+}
+
+void Renderer::updateBullet(){
+    mBullet->move(0.f, 0.f, -0.1f);
+    if (mBullet->getPosition().z() < -4.0f)
+    {
+        bulletDeath();
+    }
+}
+
+void Renderer::bulletDeath(){
+    mBullet->shouldRender = false;
 }

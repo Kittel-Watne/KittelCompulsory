@@ -24,6 +24,7 @@ qt_add_executable(QtVulkanApp
     ObjMesh.h ObjMesh.cpp
     playercharacter.h playercharacter.cpp
     trophies.h trophies.cpp
+    bullet.h bullet.cpp
 
 
 

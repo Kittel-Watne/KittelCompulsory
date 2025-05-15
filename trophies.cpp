@@ -29,6 +29,7 @@ Trophies::Trophies(const std::string& filename, int ColorType)
             it->g = 0.0f;
             it->b = 0.0f;
         }
+        return;
     }
     //Green
     if (ColorType == 1)
@@ -38,6 +39,7 @@ Trophies::Trophies(const std::string& filename, int ColorType)
             it->g = 1.0f;
             it->b = 0.0f;
         }
+        return;
     }
     //Blue
     if (ColorType == 2)
@@ -47,6 +49,7 @@ Trophies::Trophies(const std::string& filename, int ColorType)
             it->g = 0.0f;
             it->b = 1.0f;
         }
+        return;
     }
     //Yellow
     if (ColorType == 3)
@@ -56,6 +59,7 @@ Trophies::Trophies(const std::string& filename, int ColorType)
             it->g = 1.0f;
             it->b = 0.0f;
         }
+        return;
     }
 
 }

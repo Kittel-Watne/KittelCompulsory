@@ -35,6 +35,7 @@ public:
 
     QVector3D getPosition();
     void setPosition(float x, float y, float z);
+    bool shouldRender = true;
 
 protected:
     std::vector<Vertex> mVertices;

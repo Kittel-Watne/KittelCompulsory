@@ -102,6 +102,7 @@ void VulkanWindow::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_Space)
     {
         mInput.SPACE = true;
+        dynamic_cast<Renderer*>(mRenderer)->shootBullet();
     }
 }
 

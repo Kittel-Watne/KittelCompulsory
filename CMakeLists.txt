@@ -25,6 +25,7 @@ qt_add_executable(QtVulkanApp
     playercharacter.h playercharacter.cpp
     trophies.h trophies.cpp
     bullet.h bullet.cpp
+    enemycharacter.h enemycharacter.cpp
 
 
 

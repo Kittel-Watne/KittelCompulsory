@@ -8,6 +8,7 @@
 #include "VisualObject.h"
 #include "Utilities.h"
 #include "bullet.h"
+#include "enemycharacter.h"
 #include "trophies.h"
 
 class Renderer : public QVulkanWindowRenderer
@@ -135,6 +136,9 @@ private:
 
     //Trophies
     std::vector<Trophies*> mTrophies;
+
+    //Enemy
+    EnemyCharacter* mEnemy;
 
 };
 

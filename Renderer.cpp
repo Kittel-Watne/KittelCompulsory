@@ -8,6 +8,7 @@
 #include "TriangleSurface.h"
 #include "HeightMap.h"
 #include "bullet.h"
+#include "enemycharacter.h"
 #include "playercharacter.h"
 #include "stb_image.h"
 #include "ObjMesh.h"
@@ -70,9 +71,9 @@ Renderer::Renderer(QVulkanWindow *w, bool msaa)
     mBullet = new Bullet;
     mObjects.push_back(mBullet);
 
-    //Naming
-    mObjects.at(0)->setName("player");
-    mObjects.at(1)->setName("terrain");
+    //Enemy
+    mEnemy = new EnemyCharacter(assetPath + "sphere.obj");
+    mObjects.push_back(mEnemy);
 
     // **************************************
     // Objects in optional map
@@ -347,7 +348,12 @@ void Renderer::startNextFrame()
     //Has to be done each frame to get smooth movement
     mVulkanWindow->handleInput();
     mCamera.update();               //input can have moved the camera
+
+    //Updating moving components
     updateBullet();
+    mEnemy->walking();
+
+
 
     VkCommandBuffer commandBuffer = mWindow->currentCommandBuffer();
 

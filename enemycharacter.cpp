@@ -1,11 +1,11 @@
-#include "trophies.h"
+#include "enemycharacter.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <QDebug>
 #include <QVector3D>
 
-Trophies::Trophies(const std::string& filename, int ColorType)
+EnemyCharacter::EnemyCharacter(const std::string& filename)
 {
     if (!readObjFile(filename))  //If file not read, just make a triangle
     {
@@ -15,68 +15,13 @@ Trophies::Trophies(const std::string& filename, int ColorType)
         qDebug("Made you a triangle instead...");
     }
 
-    mMatrix.translate(-0.2f, 0.25f, -2.0f);
-    mMatrix.scale(0.5);
-
-    //I assume what is meant by the "standard plain color shader" is the 2nd pipeline
-    drawType = 1;
-
-    mWhiteVertices = mVertices;
-    for (auto it = mWhiteVertices.begin(); it!=mWhiteVertices.end(); it ++){
-        it->r = 1.0f;
-        it->g = 1.0f;
-        it->b = 1.0f;
-    }
-
-    //Red
-    if (ColorType == 0)
-    {
-        for (auto it = mVertices.begin(); it!=mVertices.end(); it++){
-            it->r = 1.0f;
-            it->g = 0.0f;
-            it->b = 0.0f;
-        }
-        mOriginalVertices = mVertices;
-
-        return;
-    }
-    //Green
-    if (ColorType == 1)
-    {
-        for (auto it = mVertices.begin(); it!=mVertices.end(); it++){
-            it->r = 0.0f;
-            it->g = 1.0f;
-            it->b = 0.0f;
-        }
-        mOriginalVertices = mVertices;
-        return;
-    }
-    //Blue
-    if (ColorType == 2)
-    {
-        for (auto it = mVertices.begin(); it!=mVertices.end(); it++){
-            it->r = 0.0f;
-            it->g = 0.0f;
-            it->b = 1.0f;
-        }
-        mOriginalVertices = mVertices;
-        return;
-    }
-    //Yellow
-    if (ColorType == 3)
-    {
-        for (auto it = mVertices.begin(); it!=mVertices.end(); it++){
-            it->r = 1.0f;
-            it->g = 1.0f;
-            it->b = 0.0f;
-        }
-        mOriginalVertices = mVertices;
-        return;
-    }
+    //Position of enemy
+    mMatrix.translate(0.5f, 0.2f, 2.0f);
+    mMatrix.scale(0.5f);
 
 }
 
-bool Trophies::readObjFile(const std::string& filename)
+bool EnemyCharacter::readObjFile(const std::string& filename)
 {
 
     qDebug() << "Reading " << filename.c_str();
@@ -223,7 +168,15 @@ bool Trophies::readObjFile(const std::string& filename)
     return true;
 }
 
-void Trophies::becomeWhite(){
-    mVertices = mWhiteVertices;
+void EnemyCharacter::walking() {
+    move(mWalkSpeed);
+
+    if(getPosition().x() < -1.5f)
+        turnAround();
+    if(getPosition().x() > 1.5f)
+        turnAround();
 }
 
+void EnemyCharacter::turnAround() {
+    mWalkSpeed = -mWalkSpeed;
+}

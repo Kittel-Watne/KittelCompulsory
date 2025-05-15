@@ -28,6 +28,7 @@ public:
     inline void setName(std::string name) { mName = name; }
     inline std::string getName() const { return mName; }
     inline int getDrawType() const { return drawType; }
+    inline int getColorType() const { return colorType; }
     inline QMatrix4x4 getMatrix() const {return mMatrix;}
 	inline std::vector<Vertex> getVertices() const { return mVertices; }
 	inline std::vector<uint32_t> getIndices() const { return mIndices; }
@@ -46,6 +47,7 @@ protected:
     //VkPrimitiveTopology mTopology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }; //not used
 
     int drawType{ 0 }; // 0 = fill, 1 = line
+    int colorType{0};
 };
 
 #endif // VISUALOBJECT_H

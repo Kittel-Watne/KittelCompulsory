@@ -3,10 +3,10 @@
 #include <QDebug>
 TriangleSurface::TriangleSurface() : VisualObject()
 {
-    Vertex v1{ 0.0f,  0.0f,  0.0f,   1.0f, 0.0f, 0.0f,  0.0f, 0.0f};  //  bottom-left corner
-	Vertex v2{ 1.0f,  0.0f,  0.0f,   0.0f, 1.0f, 0.0f,  1.0f, 0.0f }; //  bottom-right corner
-	Vertex v3{ 0.0f,  1.0f,  0.0f,   0.0f, 0.0f, 1.0f,  0.0f, 1.0f }; //  top-left corner
-	Vertex v4{ 1.0f,  1.0f,  0.0f,   1.0f, 1.0f, 0.0f,  1.0f, 1.0f }; //  top-right corner
+    Vertex v1{ -3.0f,  0.0f,  -5.0f,   1.0f, 0.0f, 0.0f,  0.0f, 0.0f};  //  bottom-left corner
+    Vertex v2{ 3.0f,  0.0f,  -5.0f,   0.0f, 1.0f, 0.0f,  1.0f, 0.0f }; //  bottom-right corner
+    Vertex v3{ -3.0f,  0.0f,  8.0f,   0.0f, 0.0f, 1.0f,  0.0f, 1.0f }; //  top-left corner
+    Vertex v4{ 3.0f,  0.0f,  8.0f,   1.0f, 1.0f, 0.0f,  1.0f, 1.0f }; //  top-right corner
 
     //Pushing 1st triangle,
     mVertices.push_back(v1);
@@ -18,13 +18,15 @@ TriangleSurface::TriangleSurface() : VisualObject()
 	mIndices.push_back(0);
 	mIndices.push_back(1);
 	mIndices.push_back(2);
-	mIndices.push_back(2);
-	mIndices.push_back(1);
-	mIndices.push_back(3);
+    mIndices.push_back(1);
+    mIndices.push_back(3);
+    mIndices.push_back(2);
 
     //Temporary scale and positioning
     mMatrix.scale(0.5f);
     mMatrix.translate(0.5f, 0.1f, 0.1f);
+
+    colorType = 1;
 }
 
 TriangleSurface::TriangleSurface(const std::string &filename)

@@ -25,7 +25,8 @@ Renderer::Renderer(QVulkanWindow *w, bool msaa)
             }
         }
     }
-
+    //Delete Before delivery
+    /*
     mObjects.push_back(new Triangle());
     mObjects.push_back((new TriangleSurface()));
     mObjects.push_back((new WorldAxis()));
@@ -38,6 +39,9 @@ Renderer::Renderer(QVulkanWindow *w, bool msaa)
 	mObjects.at(3)->setName("terrain");
     mObjects.at(4)->setName("suzanne");
     static_cast<HeightMap*>(mObjects.at(3))->makeTerrain(assetPath + "Heightmap.jpg");
+*/
+    //Playing Field
+    mObjects.push_back(new TriangleSurface());
 
     // **************************************
     // Objects in optional map
@@ -285,6 +289,8 @@ void Renderer::initResources()
     createTextureSampler();
 
     mTextureHandle = createTexture((assetPath + "Hund.bmp")); //Heightmap.jpg HundA.bmp
+    mTextureHandle1 = createTexture(assetPath + "orange.jpg");
+
     //mTextureHandle = createTexture((assetPath + "green-grass-texture.jpg").c_str());
 
     // getVulkanHWInfo(); // if you want to get info about the Vulkan hardware
@@ -331,9 +337,19 @@ void Renderer::startNextFrame()
 
         QMatrix4x4 mvp = mCamera.projectionMatrix() * mCamera.viewMatrix() * (*it)->getMatrix();
         setModelMatrix((*it)->getMatrix()); //mvp);
+
+
         
+        if ((*it)->getColorType() == 1)
+        {
+            setTexture(mTextureHandle1, commandBuffer);
+        }
+        else {
+            setTexture(mTextureHandle, commandBuffer);
+        }
         // Bind the texture descriptor set
-		setTexture(mTextureHandle, commandBuffer);
+
+        //SET DIFFERENT TEXTURE
         
         mDeviceFunctions->vkCmdBindVertexBuffers(commandBuffer, 0, 1, &(*it)->getVBuffer(), &vbOffset);
 		//Check if we have an index buffer - if so, use Indexed draw
@@ -349,8 +365,11 @@ void Renderer::startNextFrame()
 
     mDeviceFunctions->vkCmdEndRenderPass(commandBuffer);
 
+    //Delete
+    /*
     //Hardcoded!!!
     mObjects.at(1)->rotate(1.0f, 0.0f, 0.0f, 1.0f);
+*/
     
     mWindow->frameReady();
     mWindow->requestUpdate(); // render continuously, throttled by the presentation rate
@@ -817,6 +836,7 @@ void Renderer::releaseResources()
 
     // Destroy textures
     destroyTexture(mTextureHandle);
+    destroyTexture(mTextureHandle1);
 
 	if (mTextureSampler) {
 		mDeviceFunctions->vkDestroySampler(dev, mTextureSampler, nullptr);

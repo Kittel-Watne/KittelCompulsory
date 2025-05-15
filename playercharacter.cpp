@@ -16,7 +16,7 @@ PlayerCharacter::PlayerCharacter(const std::string& filename)
     }
 
     //Position of Player
-    mMatrix.translate(0.5f, 0.4f, 6.0f);
+    mMatrix.translate(0.5f, 0.2f, 4.0f);
     mMatrix.rotate(180.0f, 0.0f, 1.0f);
     mMatrix.scale(0.2f);
 

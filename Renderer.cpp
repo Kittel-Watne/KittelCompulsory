@@ -50,13 +50,20 @@ Renderer::Renderer(QVulkanWindow *w, bool msaa)
     mObjects.push_back(new TriangleSurface());
 
     //Trophies
-    mObjects.push_back(new Trophies(assetPath + "cylinder.obj", 0));
+    mTrophies.push_back(new Trophies(assetPath + "cylinder.obj", 0));
+    mObjects.push_back(mTrophies.back());
     mObjects.back()->move(-1.5f);
-    mObjects.push_back(new Trophies(assetPath + "cylinder.obj", 1));
+
+    mTrophies.push_back(new Trophies(assetPath + "cylinder.obj", 1));
+    mObjects.push_back(mTrophies.back());
     mObjects.back()->move(0.0f);
-    mObjects.push_back(new Trophies(assetPath + "cylinder.obj", 2));
+
+    mTrophies.push_back(new Trophies(assetPath + "cylinder.obj", 2));
+    mObjects.push_back(mTrophies.back());
     mObjects.back()->move(1.5f);
-    mObjects.push_back(new Trophies(assetPath + "cylinder.obj", 3));
+
+    mTrophies.push_back(new Trophies(assetPath + "cylinder.obj", 3));
+    mObjects.push_back(mTrophies.back());
     mObjects.back()->move(3.0f);
 
     //Bullet
@@ -331,7 +338,7 @@ void Renderer::initSwapChainResources()
     const QSize sz = mWindow->swapChainImageSize();
 
     //This sets the projection matrix - also when resizing the window:
-    mCamera.perspective(45.0f, sz.width() / (float) sz.height(), 0.01f, 500.0f);
+    mCamera.perspective(90.0f, sz.width() / (float) sz.height(), 0.01f, 500.0f);
 }
 
 void Renderer::startNextFrame()
@@ -379,7 +386,6 @@ void Renderer::startNextFrame()
             }
             // Bind the texture descriptor set
 
-            //SET DIFFERENT TEXTURE
 
             mDeviceFunctions->vkCmdBindVertexBuffers(commandBuffer, 0, 1, &(*it)->getVBuffer(), &vbOffset);
             //Check if we have an index buffer - if so, use Indexed draw
@@ -1250,10 +1256,29 @@ void Renderer::shootBullet(){
 
 void Renderer::updateBullet(){
     mBullet->move(0.f, 0.f, -0.1f);
+
+    if(!(mBullet->shouldRender))
+        return;
+
     if (mBullet->getPosition().z() < -4.0f)
     {
         bulletDeath();
     }
+    for (auto it=mTrophies.begin(); it!=mTrophies.end(); it++)
+    {
+        float tempX = (mBullet->getPosition().x() - (*it)->getPosition().x());
+        float tempY = (mBullet->getPosition().y() - (*it)->getPosition().y());
+        float tempZ = (mBullet->getPosition().z() - (*it)->getPosition().z());
+
+        float distance = sqrt(tempX*tempX + tempY*tempY + tempZ * tempZ);
+
+        if (distance < mBullet->collisionRadius + (*it)->collisionRadius)
+        {
+            bulletDeath();
+            (*it)->becomeWhite();
+        }
+    }
+
 }
 
 void Renderer::bulletDeath(){

@@ -8,6 +8,7 @@
 #include "VisualObject.h"
 #include "Utilities.h"
 #include "bullet.h"
+#include "trophies.h"
 
 class Renderer : public QVulkanWindowRenderer
 {
@@ -131,6 +132,9 @@ private:
     Bullet* mBullet;
     void bulletDeath();
     void updateBullet();
+
+    //Trophies
+    std::vector<Trophies*> mTrophies;
 
 };
 

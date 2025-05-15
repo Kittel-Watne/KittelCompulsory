@@ -21,6 +21,13 @@ Trophies::Trophies(const std::string& filename, int ColorType)
     //I assume what is meant by the "standard plain color shader" is the 2nd pipeline
     drawType = 1;
 
+    mWhiteVertices = mVertices;
+    for (auto it = mWhiteVertices.begin(); it!=mWhiteVertices.end(); it ++){
+        it->r = 1.0f;
+        it->g = 1.0f;
+        it->b = 1.0f;
+    }
+
     //Red
     if (ColorType == 0)
     {
@@ -29,6 +36,8 @@ Trophies::Trophies(const std::string& filename, int ColorType)
             it->g = 0.0f;
             it->b = 0.0f;
         }
+        mOriginalVertices = mVertices;
+
         return;
     }
     //Green
@@ -39,6 +48,7 @@ Trophies::Trophies(const std::string& filename, int ColorType)
             it->g = 1.0f;
             it->b = 0.0f;
         }
+        mOriginalVertices = mVertices;
         return;
     }
     //Blue
@@ -49,6 +59,7 @@ Trophies::Trophies(const std::string& filename, int ColorType)
             it->g = 0.0f;
             it->b = 1.0f;
         }
+        mOriginalVertices = mVertices;
         return;
     }
     //Yellow
@@ -59,6 +70,7 @@ Trophies::Trophies(const std::string& filename, int ColorType)
             it->g = 1.0f;
             it->b = 0.0f;
         }
+        mOriginalVertices = mVertices;
         return;
     }
 
@@ -211,4 +223,9 @@ bool Trophies::readObjFile(const std::string& filename)
     return true;
 }
 
+void Trophies::becomeWhite(){
+    mVertices = mWhiteVertices;
+    qDebug() << "white";
+    qDebug() << mVertices.front().r << mVertices.front().g << mVertices.front().b;
+}
 

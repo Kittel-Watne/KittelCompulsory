@@ -8,7 +8,7 @@ class EnemyCharacter : public VisualObject
 public:
     EnemyCharacter(const std::string& filename);
 
-    float mCollisionRadius = 0.5f;
+    float mCollisionRadius = 0.2f;
     void walking();
     void turnAround();
 private:

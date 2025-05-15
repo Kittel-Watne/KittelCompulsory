@@ -8,7 +8,7 @@ class Bullet : public VisualObject
 public:
     Bullet();
 
-    float collisionRadius = 0.2f;
+    float collisionRadius = 0.1f;
 };
 
 #endif // BULLET_H

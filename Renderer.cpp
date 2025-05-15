@@ -1269,7 +1269,19 @@ void Renderer::updateBullet(){
     if (mBullet->getPosition().z() < -4.0f)
     {
         bulletDeath();
+        return;
     }
+
+    float tempX = (mBullet->getPosition().x() - (mEnemy)->getPosition().x());
+    float tempY = (mBullet->getPosition().y() - (mEnemy)->getPosition().y());
+    float tempZ = (mBullet->getPosition().z() - (mEnemy)->getPosition().z());
+    float distance = sqrt(tempX*tempX + tempY*tempY + tempZ * tempZ);
+    if (distance < mBullet->collisionRadius + mEnemy->mCollisionRadius){
+        bulletDeath();
+        return;
+    }
+
+
     for (auto it=mTrophies.begin(); it!=mTrophies.end(); it++)
     {
         float tempX = (mBullet->getPosition().x() - (*it)->getPosition().x());
@@ -1282,6 +1294,7 @@ void Renderer::updateBullet(){
         {
             bulletDeath();
             (*it)->becomeWhite();
+            return;
         }
     }
 

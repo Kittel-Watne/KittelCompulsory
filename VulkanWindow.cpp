@@ -31,15 +31,7 @@ void VulkanWindow::setCameraSpeed(float value)
 
 void VulkanWindow::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_G)
-    {
-        //dynamic_cast<RenderWindow*>(mRenderWindow)->mObjects.at(mIndex)->move(-0.1f);
-        if(mSelectedObject)
-        {
-            qDebug("Move object");
-            mSelectedObject->move(-0.1f);
-        }
-    }
+
     if(event->key() == Qt::Key_F)
     {
         qDebug("Scaling object");
@@ -239,5 +231,13 @@ void VulkanWindow::handleInput()
             mCamera->updateHeigth(mCameraSpeed);
         if (mInput.E)
             mCamera->updateHeigth(-mCameraSpeed);
+    }
+    //selected Object
+    if (mSelectedObject){
+        //Reusing mCameraSpeed instead of making new variable
+        if (mInput.D)
+            mSelectedObject->move(mCameraSpeed);
+        if (mInput.A)
+            mSelectedObject->move(-mCameraSpeed);
     }
 }

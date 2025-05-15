@@ -7,6 +7,7 @@
 #include "Triangle.h"
 #include "TriangleSurface.h"
 #include "HeightMap.h"
+#include "playercharacter.h"
 #include "stb_image.h"
 #include "ObjMesh.h"
 
@@ -40,8 +41,15 @@ Renderer::Renderer(QVulkanWindow *w, bool msaa)
     mObjects.at(4)->setName("suzanne");
     static_cast<HeightMap*>(mObjects.at(3))->makeTerrain(assetPath + "Heightmap.jpg");
 */
+    //PlayerCharacter
+    mObjects.push_back(new PlayerCharacter(assetPath + "suzanne.obj"));
+
     //Playing Field
     mObjects.push_back(new TriangleSurface());
+
+    //Naming
+    mObjects.at(0)->setName("player");
+    mObjects.at(1)->setName("terrain");
 
     // **************************************
     // Objects in optional map
@@ -54,6 +62,8 @@ Renderer::Renderer(QVulkanWindow *w, bool msaa)
 
     //Need access to our VulkanWindow so making a convenience pointer
     mVulkanWindow = dynamic_cast<VulkanWindow*>(w);
+    //Making player the selected object
+    mVulkanWindow->setSelectedObject(mObjects.at(0));
 }
 
 //Automatically called by Qt on Renderer startup

@@ -1249,8 +1249,13 @@ void Renderer::destroyTexture(TextureHandle& textureHandle)
 }
 
 void Renderer::shootBullet(){
+    if (!gameRunning){
+        return;
+    }
+
     if (!mBullet->shouldRender)
     {
+        bulletsShot++;
         mBullet->setPosition(mObjects.front()->getPosition().x(),
                             //Keep the same height
                             mBullet->getPosition().y(),
@@ -1294,7 +1299,14 @@ void Renderer::updateBullet(){
         {
             bulletDeath();
             (*it)->becomeWhite();
-            return;
+
+            //Checks if any of the cylinders have not been turned white yet
+            for (auto it=mTrophies.begin(); it!=mTrophies.end(); it++) {
+                if (!((*it)->isWhite))
+                    return;
+            }
+            gameRunning = false;
+            qDebug() << bulletsShot;
         }
     }
 

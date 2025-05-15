@@ -133,6 +133,8 @@ private:
     Bullet* mBullet;
     void bulletDeath();
     void updateBullet();
+    int bulletsShot = 0;
+    bool gameRunning = true;
 
     //Trophies
     std::vector<Trophies*> mTrophies;

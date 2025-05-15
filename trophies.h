@@ -8,7 +8,7 @@ class Trophies : public VisualObject
 public:
     Trophies(const std::string& filename, int colorType);
     void becomeWhite();
-    float collisionRadius = 0.4f;
+    float collisionRadius = 0.1f;
 
     std::vector<Vertex> mOriginalVertices;
     std::vector<Vertex> mWhiteVertices;

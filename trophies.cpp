@@ -224,6 +224,12 @@ bool Trophies::readObjFile(const std::string& filename)
 }
 
 void Trophies::becomeWhite(){
+    if (isWhite){
+        return;
+    }
+
     mVertices = mWhiteVertices;
+    isWhite = true;
+    qDebug() << "Hit";
 }
 

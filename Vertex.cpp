@@ -10,12 +10,25 @@ std::ostream& operator<< (std::ostream& os, const Vertex& v) {
     os << "(" << v.u << ", " << v.v << ") ";
     return os;
 }
-std::istream& operator>> (std::istream& is, Vertex& v) {
+//original
+/*std::istream& operator>> (std::istream& is, Vertex& v) {
     // Trenger fire temporære variabler som kun skal lese inn parenteser og komma
     char dum, dum2, dum3, dum4;
     is >> dum >> v.x >> dum2 >> v.y >> dum3 >> v.z >> dum4;
     is >> dum >> v.r >> dum2 >> v.g >> dum3 >> v.b >> dum4;
     is >> dum >> v.u >> dum2 >> v.v >> dum3;
+    return is;
+}*/
+
+std::istream& operator>> (std::istream& is, Vertex& v) {
+    // Trenger fire temporære variabler som kun skal lese inn parenteser og komma
+    char dum, dum2, dum3, dum4;
+    is >> dum >> v.x >> dum2 >> v.y >> dum3 >> v.z >> dum4;
+    v.r = 0.0;
+    v.g = 1.0;
+    v.b = 0.0;
+    v.u = 0.0;
+    v.v = 0.0;
     return is;
 }
 

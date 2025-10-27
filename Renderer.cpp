@@ -26,8 +26,8 @@ Renderer::Renderer(QVulkanWindow *w, bool msaa)
         }
     }
 
-
-    mObjects.push_back((new TriangleSurface(assetPath + "lasdata.txt")));
+    mObjects.push_back((new WorldAxis()));
+    mObjects.push_back((new TriangleSurface(assetPath + "mindreData.txt")));
 
     // Dag 030225
 
@@ -248,12 +248,21 @@ void Renderer::initResources()
 
 	//Making a pipeline for drawing lines
 	mColorMaterial.pipeline = mPipeline1;                       // reusing most of the settings from the first pipeline
-    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;   // draw lines
-    rasterization.polygonMode = VK_POLYGON_MODE_FILL;           // VK_POLYGON_MODE_LINE will make a wireframe; VK_POLYGON_MODE_FILL
+    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;   // draws points
+    rasterization.polygonMode = VK_POLYGON_MODE_LINE;           // VK_POLYGON_MODE_LINE will make a wireframe; VK_POLYGON_MODE_FILL
     rasterization.lineWidth = 5.0f;
     pipelineInfo.pInputAssemblyState = &inputAssembly;
     pipelineInfo.pStages = shaderStagesC;
     result = mDeviceFunctions->vkCreateGraphicsPipelines(logicalDevice, mPipelineCache, 1, &pipelineInfo, nullptr, &mColorMaterial.pipeline);
+    if (result != VK_SUCCESS)
+        qFatal("Failed to create graphics pipeline: %d", result);
+
+    //Making a pipeline for drawing lines
+    mPipeline2 = mPipeline1;                       // reusing most of the settings from the first pipeline
+    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_POINT_LIST;   // draws points
+    rasterization.polygonMode = VK_POLYGON_MODE_LINE;           // VK_POLYGON_MODE_LINE will make a wireframe; VK_POLYGON_MODE_FILL
+    pipelineInfo.pInputAssemblyState = &inputAssembly;
+    result = mDeviceFunctions->vkCreateGraphicsPipelines(logicalDevice, mPipelineCache, 1, &pipelineInfo, nullptr, &mPipeline2);
     if (result != VK_SUCCESS)
         qFatal("Failed to create graphics pipeline: %d", result);
 
@@ -291,7 +300,7 @@ void Renderer::initSwapChainResources()
     const QSize sz = mWindow->swapChainImageSize();
 
     //This sets the projection matrix - also when resizing the window:
-    mCamera.perspective(45.0f, sz.width() / (float) sz.height(), 0.01f, 500.0f);
+    mCamera.perspective(70.0f, sz.width() / (float) sz.height(), 0.01f, 1000.0f);
 }
 
 void Renderer::startNextFrame()
@@ -319,7 +328,7 @@ void Renderer::startNextFrame()
 		if ((*it)->getDrawType() == 0)
 			mDeviceFunctions->vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, mPipeline1);
 		else
-			mDeviceFunctions->vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, mColorMaterial.pipeline);
+            mDeviceFunctions->vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, mPipeline2);
 
         QMatrix4x4 mvp = mCamera.projectionMatrix() * mCamera.viewMatrix() * (*it)->getMatrix();
         setModelMatrix((*it)->getMatrix()); //mvp);
@@ -409,7 +418,7 @@ void Renderer::setViewProjectionMatrix()
 void Renderer::setTexture(TextureHandle& textureHandle, VkCommandBuffer commandBuffer)
 {
 	mDeviceFunctions->vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, 
-        mPipelineLayout, 1, 1, &textureHandle.mTextureDescriptorSet, 0, nullptr);	
+        mPipelineLayout, 1, 1, &textureHandle.mTextureDescriptorSet, 0, nullptr);
 }
 
 void Renderer::setRenderPassParameters(VkCommandBuffer commandBuffer)
@@ -762,6 +771,11 @@ void Renderer::releaseResources()
     if (mPipeline1) {
         mDeviceFunctions->vkDestroyPipeline(dev, mPipeline1, nullptr);
         mPipeline1 = VK_NULL_HANDLE;
+    }
+
+    if (mPipeline2) {
+        mDeviceFunctions->vkDestroyPipeline(dev, mPipeline2, nullptr);
+        mPipeline2 = VK_NULL_HANDLE;
     }
 
     if (mColorMaterial.pipeline) {

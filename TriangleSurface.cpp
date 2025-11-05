@@ -42,7 +42,7 @@ TriangleSurface::TriangleSurface(const std::string &filename)
         v.x -= 5745;    //Trying to get the coordinates closer to origo
         v.y -= 443552;
         mVertices.push_back(v);
-        qDebug() << v.x << v.y << v.z;
+        //qDebug() << v.x << v.y << v.z;
     }
     drawType = 2;
     inn.close();

@@ -27,7 +27,7 @@ Renderer::Renderer(QVulkanWindow *w, bool msaa)
     }
 
     mObjects.push_back((new WorldAxis()));
-    mObjects.push_back((new TriangleSurface(assetPath + "mindreData.txt")));
+    mObjects.push_back((new TriangleSurface(assetPath + "lasdata.txt")));
 
     // Dag 030225
 
@@ -38,7 +38,7 @@ Renderer::Renderer(QVulkanWindow *w, bool msaa)
         mMap.insert(std::pair<std::string, VisualObject*>{(*it)->getName(),*it});
 
 	//Inital position of the camera
-    mCamera.setPosition(QVector3D(-50.5, -50, -350));
+    mCamera.setPosition(QVector3D(0.5, -50, -350));
 
     //Need access to our VulkanWindow so making a convenience pointer
     mVulkanWindow = dynamic_cast<VulkanWindow*>(w);

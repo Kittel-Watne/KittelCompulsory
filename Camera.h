@@ -43,7 +43,7 @@ private:
     float mPitch{ 0.f };
     float mYaw{ 0.f };
 
-    float mSpeed{ 0.f }; //camera will move by this speed
+    float mSpeed{ 0.3f }; //camera will move by this speed
 
 
 };

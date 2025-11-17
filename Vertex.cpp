@@ -22,8 +22,8 @@ std::ostream& operator<< (std::ostream& os, const Vertex& v) {
 
 std::istream& operator>> (std::istream& is, Vertex& v) {
     // Trenger fire temporære variabler som kun skal lese inn parenteser og komma
-    char dum, dum2, dum3, dum4;
-    is >> dum >> v.x >> dum2 >> v.y >> dum3 >> v.z >> dum4;
+    char dum2, dum3;
+    is >> v.x >> dum2 >> v.z >> dum3 >> v.y;
     v.r = 0.0;
     v.g = 1.0;
     v.b = 0.0;

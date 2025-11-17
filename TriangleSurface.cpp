@@ -39,8 +39,12 @@ TriangleSurface::TriangleSurface(const std::string &filename)
     for (auto i=0; i<n; i++)
     {
         inn >> v;
-        v.x -= 5745;    //Trying to get the coordinates closer to origo
-        v.y -= 443552;
+        static float xOffset = v.x;
+        static float yOffset = v.y;
+        static float zOffset = v.z;
+        v.x -= xOffset;    //Trying to get the coordinates closer to origo
+        v.y -= yOffset;
+        v.z -= zOffset;
         mVertices.push_back(v);
         //qDebug() << v.x << v.y << v.z;
     }

@@ -6,7 +6,7 @@
 #include <math.h>
 
 
-
+//veldig viktige endringer
 std::vector<Vertex> triangulate(std::vector<Vertex> inVertices){
     //std::vector<float> verticesCopy = inVertices;
     float maxX = -1.f;

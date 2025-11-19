@@ -1,4 +1,5 @@
 #include "TriangleSurface.h"
+#include "Triangulering.h"
 #include <fstream>
 #include <QDebug>
 TriangleSurface::TriangleSurface() : VisualObject()
@@ -48,6 +49,7 @@ TriangleSurface::TriangleSurface(const std::string &filename)
         mVertices.push_back(v);
         //qDebug() << v.x << v.y << v.z;
     }
+    triangulate(mVertices);
     drawType = 2;
     inn.close();
 }

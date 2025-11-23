@@ -71,16 +71,80 @@ TriangleSurface::TriangleSurface(const std::string &filename)
     mIndices = indices;
     //drawType = 2;
     inn.close();
+
+    //calculating normal vector for vertices
+    std::vector<QVector3D> vertexNormals;
+    for (int i = 0; i < mVertices.size(); i++)
+    {
+        QVector3D vertexNormal;
+        //Is it on the top border
+        if (i < amountOfQuadsX){
+            //Is it on the left corner
+            if (i % amountOfQuadsX == 0 ){
+
+            }
+             //Is it on the right corner
+            else if(i % amountOfQuadsX == (amountOfQuadsX - 1)){
+
+            }
+            //Is a normal border
+            else{
+
+            }
+        }
+        //Is it on the bottom border
+        else if(i >= mVertices.size() - amountOfQuadsX){
+            //Is it on the left corner
+            if (i % amountOfQuadsX == 0 ){
+
+            }
+            //Is it on the right corner
+            else if(i % amountOfQuadsX == (amountOfQuadsX - 1)){
+
+            }
+            //Is a normal border
+            else{
+
+            }
+        }
+        //Is it on the left border
+        if (i % amountOfQuadsX == 0 ){
+
+        }
+        //Is it on the right border
+        else if(i % amountOfQuadsX == (amountOfQuadsX - 1)){
+
+        }
+        //Is a normal vertex
+        else{
+            //there are 4 triangles using it
+            //Triangle 1
+            QVector3D vector1 = QVector3D(
+                (mVertices.at(i-amountOfQuadsX).x - mVertices.at(i).x),
+                (mVertices.at(i-amountOfQuadsX).y - mVertices.at(i).y),
+                (mVertices.at(i-amountOfQuadsX).z - mVertices.at(i).z)
+                );
+            QVector3D vector2 = QVector3D(
+                (mVertices.at(i-amountOfQuadsX).x - mVertices.at(i).x),
+                (mVertices.at(i-amountOfQuadsX).y - mVertices.at(i).y),
+                (mVertices.at(i-amountOfQuadsX).z - mVertices.at(i).z)
+                );
+            QVector3D::crossProduct(vector1, vector2)
+        }
+    }
     //Printing to .obj
+    /*
     std::ofstream out("lasData.obj");
     if (!out.is_open())
         return;
 
     for (Vertex v : mVertices){
-        out << "v" << v.x << v.y << v.z << "\n";
+        out << "v " << v.x << " " << v.y << " " << v.z << "\n";
     }
     for (int i = 0; i < mIndices.size(); i += 3){
-        out << "f" << mIndices[i] << mIndices[i+1] << mIndices[i+2] << "\n";
+        //Obj uses base 1 indices
+        out << "f " << (mIndices.at(i) + 1) << " " << (mIndices.at(i + 1) + 2) << " " << (mIndices.at(i + 2) + 3) << "\n";
     }
     out.close();
+*/
 }

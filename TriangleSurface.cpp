@@ -41,8 +41,9 @@ TriangleSurface::TriangleSurface(const std::string &filename)
     {
         inn >> v;
         static float xOffset = v.x;
-        static float yOffset = v.y * 3;
+        static float yOffset = v.y;
         static float zOffset = v.z;
+        //mMatrix.translate(v.x, v.y, v.z);
         v.x -= xOffset;    //Trying to get the coordinates closer to origo
         v.y = v.y * 3 - yOffset;
         v.z -= zOffset;
@@ -65,12 +66,21 @@ TriangleSurface::TriangleSurface(const std::string &filename)
             indices.push_back(i * amountOfQuadsX + j + 1);
             indices.push_back((i + 1) * amountOfQuadsX + j);
             indices.push_back((i + 1) * amountOfQuadsX + j + 1);
-
-            //std::cout << indices.at(i * 6 * (amountOfQuadsX - 1) + (j * 6)) << " " << indices.at(i * 6 *(amountOfQuadsX - 1) + (j * 6) + 1) << " " << indices.at(i * 6 *(amountOfQuadsX - 1) + (j * 6) + 2) << "\n";
-            //std::cout << indices.at(i * 6 * (amountOfQuadsX - 1) + (j * 6) + 3) << " " << indices.at(i * 6 *(amountOfQuadsX - 1) + (j * 6) + 4) << " " << indices.at(i * 6 *(amountOfQuadsX - 1) + (j * 6) + 5) << "\n";
         }
     }
     mIndices = indices;
     //drawType = 2;
     inn.close();
+    //Printing to .obj
+    std::ofstream out("lasData.obj");
+    if (!out.is_open())
+        return;
+
+    for (Vertex v : mVertices){
+        out << "v" << v.x << v.y << v.z << "\n";
+    }
+    for (int i = 0; i < mIndices.size(); i += 3){
+        out << "f" << mIndices[i] << mIndices[i+1] << mIndices[i+2] << "\n";
+    }
+    out.close();
 }

@@ -155,7 +155,7 @@ std::vector<Vertex> triangulate(std::vector<Vertex> inVertices){
     for (int i = 0; i < amountOfQuadsZ; i++){
         for (int j = 0; j < amountOfQuadsX; j++){
             vertices.push_back(Vertex(j * quadLength, quads.at(i * amountOfQuadsX + j).y, i * quadWidth, 0, 1, 0, 0, 0));
-            std::cout << vertices.back() << "\n";
+            //std::cout << vertices.back() << "\n";
         }
     }
 

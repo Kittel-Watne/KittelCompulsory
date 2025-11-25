@@ -360,15 +360,31 @@ TriangleSurface::TriangleSurface(const std::string &filename)
         std::cout << n.x() << " " << n.y() << " " << n.z() << "\n";
     */
 
+    //The current version of the game engine does not load in .objs which dont have texture coordinates, therefore i will make a quick/bad calculation of that here
+    std::vector<std::array<float, 2>> vertexTextures;
+    for (int i = 0; i < amountOfQuadsZ; i++)
+    {
+        //i want to keep decimals, so one of the parts of the division should be a float
+        float floatDivI = i;
+
+        for (int j = 0; j < amountOfQuadsX; j++){
+            float floatDivJ = j;
+            vertexTextures.push_back(std::array<float, 2>{floatDivJ/(amountOfQuadsX-1), floatDivI/(amountOfQuadsZ-1)});
+        }
+    }
+
     //Printing to .obj
     std::ofstream out("lasData.obj");
     if (!out.is_open())
         return;
     for (Vertex v : mVertices){
-        out << "v " << std::fixed << std::setprecision(4) << v.x << " " << v.y << " " << v.z << "\n";
+        out << "v " << std::setprecision(6) << v.x << " " << v.y << " " << v.z << "\n";
+    }
+    for (auto vt : vertexTextures){
+        out << "vt " << std::setprecision(6) << vt.at(0) << " " << vt.at(1) << "\n";
     }
     for (QVector3D n : vertexNormals){
-        out << "vn " << std::fixed << std::setprecision(4) << n.x() << " " << n.y() << " " << n.z() << "\n";
+        out << "vn " << std::setprecision(6) << n.x() << " " << n.y() << " " << n.z() << "\n";
     }
     for (int i = 0; i < mIndices.size(); i += 3){
         //Obj uses base 1 indices

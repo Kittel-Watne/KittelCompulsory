@@ -361,6 +361,7 @@ TriangleSurface::TriangleSurface(const std::string &filename)
     */
 
     //I thought i needed it, so i made a quick/bad calculation of texture coordinates
+/*
     std::vector<std::array<float, 2>> vertexTextures;
     for (int i = 0; i < amountOfQuadsZ; i++)
     {
@@ -372,7 +373,7 @@ TriangleSurface::TriangleSurface(const std::string &filename)
             vertexTextures.push_back(std::array<float, 2>{floatDivJ/(amountOfQuadsX-1), floatDivI/(amountOfQuadsZ-1)});
         }
     }
-
+*/
     //Printing to .obj
     std::ofstream out("lasData.obj");
     if (!out.is_open())
@@ -382,17 +383,19 @@ TriangleSurface::TriangleSurface(const std::string &filename)
     for (Vertex v : mVertices){
         out << "v " << std::setprecision(6) << v.x << " " << v.y << " " << v.z << "\n";
     }
-
+/*
     for (auto vt : vertexTextures){
         out << "vt " << std::setprecision(6) << vt.at(0) << " " << vt.at(1) << "\n";
     }
-
+*/
     for (QVector3D n : vertexNormals){
         out << "vn " << std::setprecision(6) << n.x() << " " << n.y() << " " << n.z() << "\n";
     }
     for (int i = 0; i < mIndices.size(); i += 3){
         //Obj uses base 1 indices
-        out << "f " << (mIndices.at(i) + 1) << " " << (mIndices.at(i + 1) + 1) << " " << (mIndices.at(i + 2) + 1) << "\n";
+        out << "f " << (mIndices.at(i) + 1) << "//" << (mIndices.at(i) + 1) << " "
+            << (mIndices.at(i + 1) + 1) << "//" << (mIndices.at(i + 1) + 1) << " "
+            << (mIndices.at(i + 2) + 1) << "//" << (mIndices.at(i + 2) + 1) << "\n";
     }
     out.close();
 }

@@ -360,7 +360,7 @@ TriangleSurface::TriangleSurface(const std::string &filename)
         std::cout << n.x() << " " << n.y() << " " << n.z() << "\n";
     */
 
-    //The current version of the game engine does not load in .objs which dont have texture coordinates, therefore i will make a quick/bad calculation of that here
+    //I thought i needed it, so i made a quick/bad calculation of texture coordinates
     std::vector<std::array<float, 2>> vertexTextures;
     for (int i = 0; i < amountOfQuadsZ; i++)
     {

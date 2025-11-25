@@ -382,11 +382,11 @@ TriangleSurface::TriangleSurface(const std::string &filename)
     for (Vertex v : mVertices){
         out << "v " << std::setprecision(6) << v.x << " " << v.y << " " << v.z << "\n";
     }
-/*
+
     for (auto vt : vertexTextures){
         out << "vt " << std::setprecision(6) << vt.at(0) << " " << vt.at(1) << "\n";
     }
-*/
+
     for (QVector3D n : vertexNormals){
         out << "vn " << std::setprecision(6) << n.x() << " " << n.y() << " " << n.z() << "\n";
     }

@@ -44,13 +44,18 @@ TriangleSurface::TriangleSurface(const std::string &filename)
         static float xOffset = v.x;
         static float yOffset = v.y;
         static float zOffset = v.z;
-        //mMatrix.translate(v.x, v.y, v.z);
-        v.x -= xOffset;    //Trying to get the coordinates closer to origo
+        v.x -= xOffset;    //getting coordinates closer to origo
         v.y = v.y - yOffset;
         v.z -= zOffset;
         mVertices.push_back(v);
-        //qDebug() << v.x << v.y << v.z;
     }
+
+    //set drawtype to 2 and comment out everything below to show pointcloud
+    drawType = 2;
+    inn.close();
+
+    //Everything below here is for triangulation/printing of obj
+    /*
     mVertices = triangulate(mVertices);
 
     int amountOfQuadsX = 100;
@@ -69,9 +74,8 @@ TriangleSurface::TriangleSurface(const std::string &filename)
             indices.push_back((i + 1) * amountOfQuadsX + j + 1);
         }
     }
+
     mIndices = indices;
-    //drawType = 2;
-    inn.close();
 
     //calculating normal vector for vertices
     std::vector<QVector3D> vertexNormals;
@@ -348,17 +352,8 @@ TriangleSurface::TriangleSurface(const std::string &filename)
 
         vertexNormals.push_back(vertexNormal);
     }
-    //error testing
-    /*
-    for (int i : vertexResults){
-        std::cout << i << " ";
-    }
-    std::cout << "\n";
 
-    for (QVector3D n : vertexNormals)
-        //std::cout << abs(n.x()) << " " << abs(n.y()) << " " << abs(n.z()) << "\n";
-        std::cout << n.x() << " " << n.y() << " " << n.z() << "\n";
-    */
+
 
     //I thought i needed it, so i made a quick/bad calculation of texture coordinates
     //Turns out i do actually need it, since the game engine does not check whether or not an .obj has texture vertices :)
@@ -399,4 +394,5 @@ TriangleSurface::TriangleSurface(const std::string &filename)
             << (mIndices.at(i + 2) + 1) << "/" << (mIndices.at(i + 2) + 1) << "/" << (mIndices.at(i + 2) + 1) << "\n";
     }
     out.close();
+*/
 }

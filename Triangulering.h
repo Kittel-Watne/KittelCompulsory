@@ -73,7 +73,7 @@ std::vector<Vertex> triangulate(std::vector<Vertex> inVertices){
         }
     }
     std::vector<int> approximationList;
-    int loopItr = 10;
+    int loopItr = 100;
 
     for (int h = 0; h < loopItr; h++){
 

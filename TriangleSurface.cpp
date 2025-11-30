@@ -55,7 +55,7 @@ TriangleSurface::TriangleSurface(const std::string &filename)
     inn.close();
 
     //Everything below here is for triangulation/printing of obj
-    /*
+
     mVertices = triangulate(mVertices);
 
     int amountOfQuadsX = 100;
@@ -394,5 +394,5 @@ TriangleSurface::TriangleSurface(const std::string &filename)
             << (mIndices.at(i + 2) + 1) << "/" << (mIndices.at(i + 2) + 1) << "/" << (mIndices.at(i + 2) + 1) << "\n";
     }
     out.close();
-*/
+
 }
